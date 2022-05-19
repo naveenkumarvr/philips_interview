@@ -1,0 +1,29 @@
+import requests
+import json
+from pprint import pprint
+import pandas as pd
+
+
+url = "https://api.github.com/orgs/philips-software/repos"
+
+payload={}
+headers = {
+  'Authorization': 'Basic dnJuYXZlZW5rcjpOS2dpdGh1YjI1JA=='
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+phillips_raw_json = (response.json())
+    
+
+phillips_repo_list = []
+for repos in phillips_raw_json:
+    repo_collector = {}
+    repo_collector['name'] = repos['name']
+    repo_collector['forks'] = repos['forks_count']
+    phillips_repo_list.append(repo_collector)
+
+
+philips_repo_df = pd.DataFrame.from_dict(phillips_repo_list)
+
+pprint(philips_repo_df.sort_values(by="forks"))
