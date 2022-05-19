@@ -1,0 +1,19 @@
+## machine 1 docker file
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y openssh-server
+RUN useradd -m -d /home/remote_user remote_user && echo "remote_user:1234" |chpasswd 
+RUN su remote_user
+RUN ["/bin/bash", "-c", "ssh-keygen -t rsa -N '' -f home/remote_user/.ssh/id_rsa <<< y" ]   ##Generate ssh on machine1
+
+
+## Pipeline command
+docker cp machine1:home/remote_user/.ssh/id_rsa.pub /tmp/id_rsa
+
+## machine 2 docker file
+FROM ubuntu
+RUN apt-get update
+RUN useradd -m -d /home/remote_user remote_user && echo "remote_user:1234" |chpasswd 
+RUN su remote_user
+RUN mkdir /home/remote_user/.ssh
+COPY /tmp/id_rsa /home/remote_user/.ssh/authorized_keys
