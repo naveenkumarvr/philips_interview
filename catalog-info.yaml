@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: philips_interview
+  description: Philips interview projects 
+  labels:
+    example.com/custom: personal
+  tags:
+    - python
+
+spec:
+  type: service
+  lifecycle: production
+  owner: Naveenkumar
+  system: public-websites
